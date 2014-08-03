@@ -1,0 +1,93 @@
+﻿<Window x:Class="ImageEditor.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:view="clr-namespace:ImageEditor.View"
+        xmlns:commands="clr-namespace:ImageEditor"
+        Title="My Modest Image Editor" Height="380" Width="547" Loaded="Window_Loaded" Closing="Window_Closing">
+    
+    <!-- Window Commands -->
+    <Window.CommandBindings>
+        <CommandBinding Command="New" Executed="NewExecuted" />
+        <CommandBinding Command="Open" Executed="OpenExecuted" />
+        <CommandBinding Command="Save" CanExecute="AnyImageExists" Executed="SaveExecuted" />
+        <CommandBinding Command="SaveAs" CanExecute="AnyImageExists" Executed="SaveAsExecuted" />
+        <CommandBinding Command="commands:AppCommands.ProcessImageCommand" CanExecute="AnyImageExists" Executed="ProcessImageExecuted" />
+        <CommandBinding Command="commands:AppCommands.LayersPaletteCommand" Executed="LayersPaletteExecuted"/>
+        <CommandBinding Command="Close" Executed="CloseExecuted" />
+    </Window.CommandBindings>
+    <Window.InputBindings>
+        <MouseBinding ></MouseBinding>
+    </Window.InputBindings>
+    
+    
+    <Grid>
+        <!-- Canvas Panel -->
+        <TabControl Margin="158,39,12,41" ItemsSource="{Binding Canvases}" SelectedValue="{Binding CurrentCanvas}">
+            <TabControl.InputBindings>
+                <MouseBinding></MouseBinding>
+            </TabControl.InputBindings>
+            <TabControl.ItemTemplate>
+                <DataTemplate>
+                        <TextBlock Text="{Binding Name}">
+                            <TextBlock.InputBindings>
+                                <MouseBinding MouseAction="MiddleClick" Command="Close" CommandParameter="{Binding}" />
+                            </TextBlock.InputBindings>
+                        </TextBlock>
+                </DataTemplate>
+            </TabControl.ItemTemplate>
+            <TabControl.ContentTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <view:CanvasView DataContext="{Binding}"></view:CanvasView>
+                    </Grid>
+                </DataTemplate>
+            </TabControl.ContentTemplate>
+        </TabControl>
+        
+        <!-- Toolbox -->
+        <view:ToolboxView DataContext="{Binding Toolbox}" HorizontalAlignment="Left" Width="99" Margin="0,39,0,0"></view:ToolboxView>
+        
+        <!-- Application Menu -->
+        <Menu Height="23" Name="menu1" VerticalAlignment="Top">
+            <!-- File Submenu -->
+            <MenuItem Header="File">
+                <MenuItem Header="New" Command="New">
+                    <MenuItem.Icon>
+                        <Image Source="/ImageEditor;component/Images/document.png" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="Open" Command="Open">
+                    <MenuItem.Icon>
+                        <Image Source="/ImageEditor;component/Images/folder.png" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="Save" Command="Save">
+                    <MenuItem.Icon>
+                        <Image Source="/ImageEditor;component/Images/save.png" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="Save as..." Command="SaveAs">
+                    <MenuItem.Icon>
+                        <Image Source="/ImageEditor;component/Images/save.png" />
+                    </MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
+            <!-- Edit Submenu -->
+            <MenuItem Header="Edit">
+                <MenuItem Header="Layers" Command="commands:AppCommands.LayersPaletteCommand">
+                    
+                </MenuItem>
+                <!-- Filters Submenu -->
+                <MenuItem Header="Filters" ItemsSource="{Binding ImageProcessors}">
+                    <MenuItem.ItemContainerStyle>
+                        <Style>
+                            <Setter Property="MenuItem.Header" Value="{Binding Name}" />
+                            <Setter Property="MenuItem.Command" Value="commands:AppCommands.ProcessImageCommand" />
+                            <Setter Property="MenuItem.CommandParameter" Value="{Binding}" />
+                        </Style>
+                    </MenuItem.ItemContainerStyle>
+                </MenuItem>
+            </MenuItem>
+        </Menu>
+    </Grid>
+</Window>

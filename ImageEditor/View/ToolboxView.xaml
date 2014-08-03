@@ -1,0 +1,45 @@
+﻿<UserControl x:Class="ImageEditor.View.ToolboxView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:toolkit ="clr-namespace:Xceed.Wpf.Toolkit;assembly=Xceed.Wpf.Toolkit"
+             mc:Ignorable="d" 
+             d:DesignHeight="308" d:DesignWidth="99">
+    <UserControl.Resources>
+        <DataTemplate x:Key="ItemTemplate">
+            <Image Source="{Binding Icon}" Stretch="None" Width="32" Height="32" HorizontalAlignment="Center" VerticalAlignment="Center" />
+        </DataTemplate>
+
+        <Style TargetType="{x:Type ListViewItem}" x:Key="ContainerStyle">            
+            <Setter Property="ContentTemplate" Value="{StaticResource ItemTemplate}" />            
+            <Style.Resources>
+                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="CornflowerBlue"/>
+                <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="CornflowerBlue"/>
+            </Style.Resources>
+        </Style>
+    </UserControl.Resources>
+    
+    <Grid>
+        <toolkit:ColorPicker Margin="12,200,0,0" SelectedColor="{Binding BackColor}" HorizontalAlignment="Left" Width="36" Height="23" VerticalAlignment="Top" />
+        <toolkit:ColorPicker Margin="54,200,0,0" SelectedColor="{Binding ForeColor}" HorizontalAlignment="Left" Width="36" Height="23" VerticalAlignment="Top" />
+        <ListView Height="182" Margin="12,12,9,0" Name="listView1" VerticalAlignment="Top" ItemsSource="{Binding Tools}" SelectedValue="{Binding CurrentTool}" ItemContainerStyle="{StaticResource ContainerStyle}">
+            <ListView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel
+                        Width="{Binding (FrameworkElement.ActualWidth), RelativeSource={RelativeSource AncestorType=ScrollContentPresenter}}"
+                        ItemWidth="{Binding (ListView.View).ItemWidth, RelativeSource={RelativeSource AncestorType=ListView}}"
+                        MinWidth="{Binding ItemWidth, RelativeSource={RelativeSource Self}}"
+                        ItemHeight="{Binding (ListView.View).ItemHeight, RelativeSource={RelativeSource AncestorType=ListView}}" />
+                </ItemsPanelTemplate>
+            </ListView.ItemsPanel>
+        </ListView>
+        <ListView SelectedValue="{Binding Thickness}" ItemsSource="{Binding LineThicknesses}" Margin="12,229,9,12">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Line Stroke="Black" StrokeThickness="{Binding}" X1="0" Y1="0" X2="60" Y2="0" Margin="5,5,5,5"></Line>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </Grid>
+</UserControl>

@@ -1,0 +1,34 @@
+﻿<Window x:Class="ImageEditor.View.LayersView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:views="clr-namespace:ImageEditor.View"
+        xmlns:commands="clr-namespace:ImageEditor"
+        Title="Layers" Height="300" Width="300" ShowInTaskbar="False" WindowStyle="ToolWindow">
+    <Window.CommandBindings>
+        <CommandBinding Command="commands:LayerCommands.AddLayerCommand" CanExecute="AddLayerCanExecute" Executed="AddLayerExecuted" />
+        <CommandBinding Command="commands:LayerCommands.RemoveLayerCommand" CanExecute="RemoveLayerCanExecute" Executed="RemoveLayerExecuted" />
+        <CommandBinding Command="commands:LayerCommands.MoveLayerUpCommand" CanExecute="MoveLayerUpCanExecute" Executed="MoveLayerUpExecuted" />
+        <CommandBinding Command="commands:LayerCommands.MoveLayerDownCommand" CanExecute="MoveLayerDownCanExecute" Executed="MoveLayerDownExecuted" />
+    </Window.CommandBindings>
+    <Grid>
+        <ListView Margin="12,12,12,41" ItemsSource="{Binding CurrentCanvas.EditedImage.Layers}" SelectedValue="{Binding CurrentCanvas.EditedImage.CurrentLayer}">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <views:LayerView DataContext="{Binding}" Height="58" />
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        <Button Command="commands:LayerCommands.AddLayerCommand" HorizontalAlignment="Left" Margin="12,0,0,12" Width="23" Height="23" VerticalAlignment="Bottom">
+            <Image Source="/ImageEditor;component/Images/plus.png" Stretch="None" />
+        </Button>
+        <Button Command="commands:LayerCommands.RemoveLayerCommand" HorizontalAlignment="Left" Margin="41,0,0,12" Width="23" Height="23" VerticalAlignment="Bottom">
+            <Image Source="/ImageEditor;component/Images/delete.png" Stretch="None" />
+        </Button>
+        <Button Command="commands:LayerCommands.MoveLayerUpCommand" Height="23" Margin="0,0,41,12" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="23">
+            <Image Source="/ImageEditor;component/Images/up.png" Stretch="None" />
+        </Button>
+        <Button Command="commands:LayerCommands.MoveLayerDownCommand" Height="23" Margin="0,0,12,12" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="23">
+            <Image Source="/ImageEditor;component/Images/down.png" Stretch="None"/>
+        </Button>
+    </Grid>
+</Window>
